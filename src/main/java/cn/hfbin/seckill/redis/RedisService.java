@@ -100,7 +100,13 @@ public class RedisService {
 			  returnToPool(jedis);
 		 }
 	}
-	
+
+	/**
+	 * bean 转 String
+	 * @param value
+	 * @param <T>
+	 * @return
+	 */
 	private <T> String beanToString(T value) {
 		if(value == null) {
 			return null;
@@ -117,7 +123,14 @@ public class RedisService {
 		}
 	}
 
-	@SuppressWarnings("unchecked")
+
+	/**
+	 * string转bean
+	 * @param str
+	 * @param clazz
+	 * @param <T>
+	 * @return
+	 */
 	private <T> T stringToBean(String str, Class<T> clazz) {
 		if(str == null || str.length() <= 0 || clazz == null) {
 			 return null;
