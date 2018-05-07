@@ -45,9 +45,12 @@ public class RedisService {
 			//生成真正的key
 			 String realKey  = prefix.getPrefix() + key;
 			 int seconds =  prefix.expireSeconds();
+			 //seconds == 0 永远不会过期
 			 if(seconds <= 0) {
+			 	 //直接保存
 				 jedis.set(realKey, str);
 			 }else {
+			 	 //设置过期时间
 				 jedis.setex(realKey, seconds, str);
 			 }
 			 return true;

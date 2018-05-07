@@ -1,7 +1,7 @@
 package cn.hfbin.seckill.redis;
 
 public abstract class BasePrefix implements KeyPrefix{
-	
+
 	private int expireSeconds;
 	
 	private String prefix;
