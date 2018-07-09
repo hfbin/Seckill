@@ -6,5 +6,5 @@ package cn.hfbin.seckill.controller;
  * Time: 12:36
  * Such description:
  */
-public class PageClntroller {
+public class PageController {
 }
