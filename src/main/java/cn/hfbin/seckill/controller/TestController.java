@@ -40,6 +40,7 @@ public class TestController {
         User user  = new User();
         user.setId(1);
         user.setName("1111");
+
         redisService.set(UserKey.getById, ""+2, user);//UserKey:id1
         return Result.success(true);
     }
