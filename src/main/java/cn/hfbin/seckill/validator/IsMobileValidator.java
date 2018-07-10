@@ -5,7 +5,6 @@ import javax.validation.ConstraintValidatorContext;
 import cn.hfbin.seckill.util.ValidatorUtil;
 import org.apache.commons.lang3.StringUtils;
 
-
 public class IsMobileValidator implements ConstraintValidator<IsMobile, String> {
 
 	private boolean required = false;

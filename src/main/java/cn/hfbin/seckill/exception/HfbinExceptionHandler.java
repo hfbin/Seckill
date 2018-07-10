@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @ControllerAdvice
 @ResponseBody
-public class GlobalExceptionHandler {
+public class HfbinExceptionHandler {
 	@ExceptionHandler(value=Exception.class)
 	public Result<String> exceptionHandler(HttpServletRequest request, Exception e){
 		e.printStackTrace();
-		if(e instanceof GlobalException) {
-			GlobalException ex = (GlobalException)e;
+		if(e instanceof HfbinException) {
+			HfbinException ex = (HfbinException)e;
 			return Result.error(ex.getCm());
 		}else if(e instanceof BindException) {
 			BindException ex = (BindException)e;

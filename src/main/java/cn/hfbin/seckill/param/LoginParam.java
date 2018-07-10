@@ -1,6 +1,9 @@
 package cn.hfbin.seckill.param;
 
 import cn.hfbin.seckill.validator.IsMobile;
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.hibernate.validator.constraints.Length;
 
 import javax.validation.constraints.NotNull;
@@ -11,29 +14,15 @@ import javax.validation.constraints.NotNull;
  * Time: 10:11
  * Such description:
  */
+@Getter
+@Setter
+@ToString
 public class LoginParam {
-    @NotNull(message = "手机号没能为空")
+
+    @NotNull(message = "手机号不能为空")
     @IsMobile()
     private String mobile;
-
     @NotNull(message="密码不能为空")
-    @Length(min=6,message = "长度不能低于六位")
+    @Length(min = 1, max = 7, message = "密码长度需要在7个字以内")
     private String password;
-
-    public String getMobile() {
-        return mobile;
-    }
-    public void setMobile(String mobile) {
-        this.mobile = mobile;
-    }
-    public String getPassword() {
-        return password;
-    }
-    public void setPassword(String password) {
-        this.password = password;
-    }
-    @Override
-    public String toString() {
-        return "LoginVo [mobile=" + mobile + ", password=" + password + "]";
-    }
 }
