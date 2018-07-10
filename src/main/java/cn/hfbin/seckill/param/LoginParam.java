@@ -12,12 +12,12 @@ import javax.validation.constraints.NotNull;
  * Such description:
  */
 public class LoginParam {
-    @NotNull
-    @IsMobile
+    @NotNull(message = "手机号没能为空")
+    @IsMobile()
     private String mobile;
 
     @NotNull(message="密码不能为空")
-    @Length(min=32)
+    @Length(min=6,message = "长度不能低于六位")
     private String password;
 
     public String getMobile() {
