@@ -1,7 +1,12 @@
 package cn.hfbin.seckill.controller;
 
+import cn.hfbin.seckill.entity.User;
+import cn.hfbin.seckill.exception.HfbinException;
 import cn.hfbin.seckill.param.LoginParam;
+import cn.hfbin.seckill.result.CodeMsg;
 import cn.hfbin.seckill.result.Result;
+import cn.hfbin.seckill.service.UserService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -19,11 +24,11 @@ import javax.validation.Valid;
 @RequestMapping("/user")
 public class LoginController {
 
+    @Autowired
+    UserService userService;
     @RequestMapping("/login")
     @ResponseBody
-    public Result<Boolean> doLogin(HttpServletResponse response,@Valid LoginParam loginParam) {
-        //登录
-        //userService.login(response, loginVo);
-        return Result.success(true);
+    public Result<User> doLogin(HttpServletResponse response,@Valid LoginParam loginParam) {
+        return userService.login(loginParam);
     }
 }

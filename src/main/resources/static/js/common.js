@@ -4,4 +4,4 @@ function g_showLoading(){
 	return idx;
 }
 //salt
-var g_passsword_salt="1a2b3c4d"
+var g_passsword_salt="9d5b364d"

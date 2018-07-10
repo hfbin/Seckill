@@ -23,6 +23,6 @@ public class LoginParam {
     @IsMobile()
     private String mobile;
     @NotNull(message="密码不能为空")
-    @Length(min = 1, max = 7, message = "密码长度需要在7个字以内")
+    @Length(min = 23, message = "密码长度需要在7个字以内")
     private String password;
 }

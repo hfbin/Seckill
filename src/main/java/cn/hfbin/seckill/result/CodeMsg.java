@@ -1,5 +1,12 @@
 package cn.hfbin.seckill.result;
-
+/**
+ * My Blog : www.hfbin.cn
+ * github: https://github.com/hfbin
+ * Created by: HuangFuBin
+ * Date: 2018/6/09
+ * Time: 12:00
+ * Such description:
+ */
 public class CodeMsg {
 	
 	private int code;

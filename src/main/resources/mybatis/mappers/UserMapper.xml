@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.hfbin.seckill.mapper.UserMapper" >
+    <resultMap id="BaseResultMap" type="cn.hfbin.seckill.entity.User" >
+        <id column="id" property="id" jdbcType="INTEGER" />
+        <result column="user_name" property="userName" jdbcType="VARCHAR" />
+        <result column="phone" property="phone" jdbcType="VARCHAR" />
+        <result column="password" property="password" jdbcType="VARCHAR" />
+        <result column="salt" property="salt" jdbcType="VARCHAR" />
+        <result column="head" property="head" jdbcType="VARCHAR" />
+        <result column="login_count" property="loginCount" jdbcType="INTEGER" />
+        <result column="register_date" property="registerDate" jdbcType="TIMESTAMP" />
+        <result column="last_login_date" property="lastLoginDate" jdbcType="TIMESTAMP" />
+    </resultMap>
+    <sql id="Base_Column_List" >
+        id, user_name, phone, password, salt, head, login_count, register_date, last_login_date
+    </sql>
+    <select id="selectByPhoneAndPassword" parameterType="map" resultMap="BaseResultMap">
+      SELECT
+      <include refid="Base_Column_List"/>
+      from user
+      WHERE phone=#{phone} and password=#{password}
+    </select>
+    <select id="checkPhone" parameterType="map" resultMap="BaseResultMap">
+        SELECT
+        <include refid="Base_Column_List"/>
+        from user
+        WHERE phone=#{phone}
+    </select>
+
+</mapper>
