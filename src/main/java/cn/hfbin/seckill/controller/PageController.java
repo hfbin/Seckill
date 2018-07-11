@@ -11,11 +11,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 
 @Controller
+@RequestMapping("/page")
 public class PageController {
 
 
     @RequestMapping("login")
     public String loginPage(){
+
         return "login";
     }
 }

@@ -13,15 +13,13 @@ public class Result<T> {
 	private int code;
 	private String msg;
 	private T data;
-	/**
-	 *  成功时候的调用
-	 * */
+
+	public boolean isSuccess(){
+		return this.code == CodeMsg.SUCCESS.getCode();
+	}
 	public static  <T> Result<T> success(T data){
 		return new Result<T>(data);
 	}
-	/**
-	 *  失败时候的调用
-	 * */
 	public static  <T> Result<T> error(CodeMsg codeMsg){
 		return new Result<T>(codeMsg);
 	}

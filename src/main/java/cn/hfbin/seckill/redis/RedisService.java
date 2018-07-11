@@ -30,11 +30,23 @@ public class RedisService {
 			  returnToPool(jedis);
 		 }
 	}
+
+	public  Long expice(KeyPrefix prefix,String key,int exTime){
+		Jedis jedis = null;
+		Long result = null;
+		try {
+			jedis =  jedisPool.getResource();
+			result = jedis.expire(prefix+key,exTime);
+			return result;
+		} finally {
+			returnToPool(jedis);
+		}
+	}
 	
 	/**
 	 * 设置对象
 	 * */
-	public <T> boolean set(KeyPrefix prefix, String key,  T value) {
+	public <T> boolean set(KeyPrefix prefix, String key,  T value ,int exTime) {
 		 Jedis jedis = null;
 		 try {
 			 jedis =  jedisPool.getResource();
@@ -44,14 +56,12 @@ public class RedisService {
 			 }
 			//生成真正的key
 			 String realKey  = prefix.getPrefix() + key;
-			 int seconds =  prefix.expireSeconds();
-			 //seconds == 0 永远不会过期
-			 if(seconds <= 0) {
+			 if(exTime == 0) {
 			 	 //直接保存
 				 jedis.set(realKey, str);
 			 }else {
 			 	 //设置过期时间
-				 jedis.setex(realKey, seconds, str);
+				 jedis.setex(realKey, exTime, str);
 			 }
 			 return true;
 		 }finally {
