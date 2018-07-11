@@ -36,7 +36,7 @@ public class RedisService {
 		Long result = null;
 		try {
 			jedis =  jedisPool.getResource();
-			result = jedis.expire(prefix+key,exTime);
+			result = jedis.expire(prefix.getPrefix()+key,exTime);
 			return result;
 		} finally {
 			returnToPool(jedis);
