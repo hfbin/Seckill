@@ -1,7 +1,7 @@
 package cn.hfbin.seckill.service.ipml;
 
 import cn.hfbin.seckill.entity.User;
-import cn.hfbin.seckill.mapper.UserMapper;
+import cn.hfbin.seckill.dao.UserMapper;
 import cn.hfbin.seckill.param.LoginParam;
 import cn.hfbin.seckill.result.CodeMsg;
 import cn.hfbin.seckill.result.Result;

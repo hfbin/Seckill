@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.hfbin.seckill.dao.SeckillGoodsMapper" >
+  <resultMap id="BaseResultMap" type="cn.hfbin.seckill.entity.SeckillGoods" >
+    <constructor >
+      <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="goods_id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="seckil_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="stock_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="start_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="end_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, goods_id, seckil_price, stock_count, start_date, end_date
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from seckill_goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from seckill_goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.hfbin.seckill.entity.SeckillGoods" >
+    insert into seckill_goods (id, goods_id, seckil_price, 
+      stock_count, start_date, end_date
+      )
+    values (#{id,jdbcType=BIGINT}, #{goodsId,jdbcType=BIGINT}, #{seckilPrice,jdbcType=DECIMAL}, 
+      #{stockCount,jdbcType=INTEGER}, #{startDate,jdbcType=TIMESTAMP}, #{endDate,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.hfbin.seckill.entity.SeckillGoods" >
+    insert into seckill_goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="goodsId != null" >
+        goods_id,
+      </if>
+      <if test="seckilPrice != null" >
+        seckil_price,
+      </if>
+      <if test="stockCount != null" >
+        stock_count,
+      </if>
+      <if test="startDate != null" >
+        start_date,
+      </if>
+      <if test="endDate != null" >
+        end_date,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="goodsId != null" >
+        #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="seckilPrice != null" >
+        #{seckilPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockCount != null" >
+        #{stockCount,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        #{endDate,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hfbin.seckill.entity.SeckillGoods" >
+    update seckill_goods
+    <set >
+      <if test="goodsId != null" >
+        goods_id = #{goodsId,jdbcType=BIGINT},
+      </if>
+      <if test="seckilPrice != null" >
+        seckil_price = #{seckilPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="stockCount != null" >
+        stock_count = #{stockCount,jdbcType=INTEGER},
+      </if>
+      <if test="startDate != null" >
+        start_date = #{startDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endDate != null" >
+        end_date = #{endDate,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hfbin.seckill.entity.SeckillGoods" >
+    update seckill_goods
+    set goods_id = #{goodsId,jdbcType=BIGINT},
+      seckil_price = #{seckilPrice,jdbcType=DECIMAL},
+      stock_count = #{stockCount,jdbcType=INTEGER},
+      start_date = #{startDate,jdbcType=TIMESTAMP},
+      end_date = #{endDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

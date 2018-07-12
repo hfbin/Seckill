@@ -1,4 +1,4 @@
-package cn.hfbin.seckill.mapper;
+package cn.hfbin.seckill.dao;
 
 import cn.hfbin.seckill.entity.User;
 import org.apache.ibatis.annotations.Param;

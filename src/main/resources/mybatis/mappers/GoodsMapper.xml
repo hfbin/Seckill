@@ -1,0 +1,171 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="cn.hfbin.seckill.dao.GoodsMapper" >
+  <resultMap id="BaseResultMap" type="cn.hfbin.seckill.entity.Goods" >
+    <constructor >
+      <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_img" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="goods_stock" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="create_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+    </constructor>
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="cn.hfbin.seckill.entity.Goods" >
+    <constructor >
+      <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_img" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="goods_stock" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="create_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="goods_detail" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, goods_name, goods_title, goods_img, goods_price, goods_stock, create_date, update_date
+  </sql>
+  <sql id="Blob_Column_List" >
+    goods_detail
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from goods
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="cn.hfbin.seckill.entity.Goods" >
+    insert into goods (id, goods_name, goods_title, 
+      goods_img, goods_price, goods_stock, 
+      create_date, update_date, goods_detail
+      )
+    values (#{id,jdbcType=BIGINT}, #{goodsName,jdbcType=VARCHAR}, #{goodsTitle,jdbcType=VARCHAR}, 
+      #{goodsImg,jdbcType=VARCHAR}, #{goodsPrice,jdbcType=DECIMAL}, #{goodsStock,jdbcType=INTEGER}, 
+      #{createDate,jdbcType=TIMESTAMP}, #{updateDate,jdbcType=TIMESTAMP}, #{goodsDetail,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="cn.hfbin.seckill.entity.Goods" >
+    insert into goods
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="goodsName != null" >
+        goods_name,
+      </if>
+      <if test="goodsTitle != null" >
+        goods_title,
+      </if>
+      <if test="goodsImg != null" >
+        goods_img,
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price,
+      </if>
+      <if test="goodsStock != null" >
+        goods_stock,
+      </if>
+      <if test="createDate != null" >
+        create_date,
+      </if>
+      <if test="updateDate != null" >
+        update_date,
+      </if>
+      <if test="goodsDetail != null" >
+        goods_detail,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="goodsName != null" >
+        #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsTitle != null" >
+        #{goodsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImg != null" >
+        #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsStock != null" >
+        #{goodsStock,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsDetail != null" >
+        #{goodsDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hfbin.seckill.entity.Goods" >
+    update goods
+    <set >
+      <if test="goodsName != null" >
+        goods_name = #{goodsName,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsTitle != null" >
+        goods_title = #{goodsTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsImg != null" >
+        goods_img = #{goodsImg,jdbcType=VARCHAR},
+      </if>
+      <if test="goodsPrice != null" >
+        goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="goodsStock != null" >
+        goods_stock = #{goodsStock,jdbcType=INTEGER},
+      </if>
+      <if test="createDate != null" >
+        create_date = #{createDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateDate != null" >
+        update_date = #{updateDate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="goodsDetail != null" >
+        goods_detail = #{goodsDetail,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="cn.hfbin.seckill.entity.Goods" >
+    update goods
+    set goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_title = #{goodsTitle,jdbcType=VARCHAR},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      goods_stock = #{goodsStock,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP},
+      goods_detail = #{goodsDetail,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="cn.hfbin.seckill.entity.Goods" >
+    update goods
+    set goods_name = #{goodsName,jdbcType=VARCHAR},
+      goods_title = #{goodsTitle,jdbcType=VARCHAR},
+      goods_img = #{goodsImg,jdbcType=VARCHAR},
+      goods_price = #{goodsPrice,jdbcType=DECIMAL},
+      goods_stock = #{goodsStock,jdbcType=INTEGER},
+      create_date = #{createDate,jdbcType=TIMESTAMP},
+      update_date = #{updateDate,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

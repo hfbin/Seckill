@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="cn.hfbin.seckill.mapper.UserMapper" >
+<mapper namespace="cn.hfbin.seckill.dao.UserMapper" >
     <resultMap id="BaseResultMap" type="cn.hfbin.seckill.entity.User" >
         <id column="id" property="id" jdbcType="INTEGER" />
         <result column="user_name" property="userName" jdbcType="VARCHAR" />

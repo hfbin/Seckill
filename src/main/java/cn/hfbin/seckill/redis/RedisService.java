@@ -68,7 +68,17 @@ public class RedisService {
 			  returnToPool(jedis);
 		 }
 	}
-	
+	public  Long del(KeyPrefix prefix,String key){
+		Jedis jedis = null;
+		Long result = null;
+		try {
+			jedis =  jedisPool.getResource();
+			result = jedis.del(prefix.getPrefix()+key);
+			return result;
+		} finally {
+			returnToPool(jedis);
+		}
+	}
 	/**
 	 * 判断key是否存在
 	 * */
