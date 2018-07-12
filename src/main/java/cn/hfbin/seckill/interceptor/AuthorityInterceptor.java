@@ -67,7 +67,7 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             logger.info("权限拦截器拦截到请求,className:{},methodName:{}", className, methodName);
             return true;
         }
-        if (StringUtils.equals(className, "PageController")) {
+        if (StringUtils.equals(className, "PageController") || StringUtils.equals(className, "GoodsController")) {
             //如果是拦截到登录请求，不打印参数，因为参数里面有密码，全部会打印到日志中，防止日志泄露
             logger.info("权限拦截器拦截到请求,className:{},methodName:{}", className, methodName);
             return true;

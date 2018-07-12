@@ -9,7 +9,7 @@ import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 
 @SpringBootApplication
-@MapperScan("cn.hfbin.seckill.mapper")
+@MapperScan("cn.hfbin.seckill.dao")
 public class SeckillApplication {
 
 	public static void main(String[] args) {

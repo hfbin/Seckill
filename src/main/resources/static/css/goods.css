@@ -1,0 +1,55 @@
+/**
+ * Created by hfbin
+ * User: HuangFuBin
+ * Date: 2018/7/12
+ */
+@charset "utf-8";
+*{
+    padding: 0;
+    margin: 0;
+
+}
+.seckill_content{
+    width: 100%;
+    min-width: 800px;
+}
+.seckill_content .title{
+    width: 100%;
+    height: 55px;
+    text-align: center;
+    line-height: 55px;
+}
+.all_seckill_goods{
+    width: 100%;
+    margin: 0 auto;
+
+}
+.all_seckill_goods .seckill_goods{
+    width: 260px;
+    height:auto;
+    float: left;
+    margin: 20px;
+}
+.all_seckill_goods .seckill_goods h4{
+    text-align: center;
+}
+.all_seckill_goods .seckill_goods .seckill_price{
+    width: 100%;
+    font-size: 12px;
+
+}
+.all_seckill_goods .seckill_goods .seckill_price p {
+    text-align: center;
+    overflow: hidden;
+    color: #b0b0b0;
+}
+.all_seckill_goods .seckill_goods .seckill_price p .price1{
+    color: #ff6700;
+}
+.all_seckill_goods .seckill_goods .seckill_price p .price2{
+    color: #b0b0b0;
+}
+.seckill_price button{
+    width: 100%;
+    border: #9b11cc solid 1px;
+}

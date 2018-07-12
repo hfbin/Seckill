@@ -1,6 +1,9 @@
 package cn.hfbin.seckill.dao;
 
+import cn.hfbin.seckill.bo.GoodsBo;
 import cn.hfbin.seckill.entity.Goods;
+
+import java.util.List;
 
 public interface GoodsMapper {
     int deleteByPrimaryKey(Long id);
@@ -16,4 +19,8 @@ public interface GoodsMapper {
     int updateByPrimaryKeyWithBLOBs(Goods record);
 
     int updateByPrimaryKey(Goods record);
+
+    List<GoodsBo> selectAllGoodes ();
+
+    GoodsBo getseckillGoodsBoByGoodsId(long goodsId);
 }

@@ -9,6 +9,7 @@
       <arg column="goods_id" jdbcType="BIGINT" javaType="java.lang.Long" />
     </constructor>
   </resultMap>
+
   <sql id="Base_Column_List" >
     id, user_id, order_id, goods_id
   </sql>

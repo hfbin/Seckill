@@ -26,11 +26,32 @@
       <arg column="goods_detail" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
     </constructor>
   </resultMap>
+  <resultMap id="BaseResultSeckillOrderAndGoodsMap" type="cn.hfbin.seckill.bo.GoodsBo" >
+    <constructor >
+      <arg column="seckil_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="stock_count" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="start_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="end_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="id" jdbcType="BIGINT" javaType="java.lang.Long" />
+      <arg column="goods_name" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_title" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_img" jdbcType="VARCHAR" javaType="java.lang.String" />
+      <arg column="goods_price" jdbcType="DECIMAL" javaType="java.math.BigDecimal" />
+      <arg column="goods_stock" jdbcType="INTEGER" javaType="java.lang.Integer" />
+      <arg column="create_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="update_date" jdbcType="TIMESTAMP" javaType="java.util.Date" />
+      <arg column="goods_detail" jdbcType="LONGVARCHAR" javaType="java.lang.String" />
+    </constructor>
+  </resultMap>
+  <sql id="Base_Column_Seckill_List" >
+    sg.seckil_price , sg.stock_count , sg.start_date , sg.end_date
+  </sql>
   <sql id="Base_Column_List" >
-    id, goods_name, goods_title, goods_img, goods_price, goods_stock, create_date, update_date
+    goods.id, goods.goods_name, goods.goods_title, goods.goods_img, goods.goods_price,
+    goods.goods_stock, goods.create_date, goods.update_date
   </sql>
   <sql id="Blob_Column_List" >
-    goods_detail
+    goods.goods_detail
   </sql>
   <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
     select 
@@ -168,4 +189,26 @@
       update_date = #{updateDate,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectAllGoodes" resultMap="BaseResultSeckillOrderAndGoodsMap">
+    select
+    <include refid="Base_Column_Seckill_List"/>
+    ,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods
+    left join seckill_goods sg on sg.goods_id = goods.id
+  </select>
+  <select id="getseckillGoodsBoByGoodsId" resultMap="BaseResultSeckillOrderAndGoodsMap">
+    select
+    <include refid="Base_Column_Seckill_List"/>
+    ,
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from goods
+    left join seckill_goods sg on sg.goods_id = goods.id
+    WHERE  goods.id = #{goodsId}
+  </select>
 </mapper>
