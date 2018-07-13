@@ -1,0 +1,26 @@
+/**
+ * Created by hfbin
+ * User: HuangFuBin
+ * Date: 2018/7/12
+ */
+@charset "utf-8";
+*{
+    padding: 0;
+    margin: 0;
+
+}
+.goods{
+    width: 100%;
+}
+.container{
+    width: 1224px;
+    margin: 0 auto;
+}
+.container .goods_view{
+    width: 560px;
+    float: left;
+}
+.container .goods_info{
+    width: 560px;
+    float: left;
+}

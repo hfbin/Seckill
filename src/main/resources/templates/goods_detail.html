@@ -7,6 +7,8 @@
     <script type="text/javascript" th:src="@{/js/jquery.min.js}"></script>
     <!-- bootstrap -->
     <link rel="stylesheet" type="text/css" th:href="@{/bootstrap/css/bootstrap.min.css}"/>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/detail.css}"/>
+
 </head>
 <body>
 
@@ -57,7 +59,22 @@
         </tr>
     </table>
 </div>
+<div class="product-box">
+    <div class="panel-body">
+        <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
+        <span>没有收货地址的提示。。。</span>
+    </div>
+</div>
+<div class="goods">
+    <div class="container">
+        <div class="goods_view">
+            <img src="/img/iphone.jpg" width="560"/>
+        </div>
+        <div class="goods_info">
 
+        </div>
+    </div>
+</div>
 
 </body>
 <script type="text/javascript" th:src="@{/bootstrap/js/bootstrap.min.js}"></script>
