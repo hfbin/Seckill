@@ -9,18 +9,105 @@
     margin: 0;
 
 }
+.top{
+    width: 100%;
+    height: 60px;
+    border:#ff6700 dashed 1px ;
+    padding: 10px;
+    margin: 15px;
+}
+.top span{
+    text-align: center;
+    display: block;
+    width: 100%;
+}
 .goods{
     width: 100%;
 }
-.container{
+.containers{
     width: 1224px;
     margin: 0 auto;
+    min-height: 560px;
 }
-.container .goods_view{
+.containers .goods_view{
     width: 560px;
     float: left;
 }
-.container .goods_info{
+.containers .goods_info{
     width: 560px;
     float: left;
+    padding-left: 15px;
+}
+.goods_info{
+    margin-top: 80px;
+}
+.goods_info h2{
+    line-height: 1;
+    margin: 0;
+    padding: 0;
+    font-size: 24px;
+    font-weight: normal;
+    color: #212121;
+}
+.goods_info p{
+    padding-top: 8px;
+}
+.goods_info .title{
+    color: #b0b0b0;
+    margin: 0;
+    padding: 0;
+    padding-top: 8px;
+    display: block;
+}
+.goods_info p .price1{
+    font-size: 18px;
+    color: #ff6700;
+}
+.goods_info p .price2{
+    font-size: 18px;
+    margin-left: 15px;
+}
+.goods_info .seckill_data{
+    height: 100px;
+    width: 100%;
+}
+.goods_info .seckill_data div{
+    float: left;
+    width: 50%;
+}
+
+.goods_info .seckill_data span{
+    background-color: #ff6700;
+    display: block;
+    padding: 10px;
+    color: #fff;
+    border-right:#ffffff solid 2px ;
+
+}
+.goods_info .seckill_data p{
+    display: block;
+    padding: 10px;
+    margin-right: 2px;
+    border-left:#ccc solid 2px ;
+    border-right:#ccc solid 2px ;
+    border-bottom:#ccc solid 2px ;
+}
+.goods_info .count{
+    margin-top:15px ;
+    margin-bottom: 45px;
+    font-size: 16px;
+    width: 100%;
+    line-height: 48px;
+    height: 48px;
+    border:#ff6700 dashed 1px ;
+    text-align: center;
+}
+.goods_info .seckillStatus{
+    margin-top:15px ;
+    font-size: 16px;
+    width: 100%;
+    line-height: 48px;
+    height: 48px;
+    border:#ff6700 dashed 1px ;
+    text-align: center;
 }

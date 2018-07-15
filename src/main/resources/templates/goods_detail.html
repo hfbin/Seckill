@@ -13,65 +13,48 @@
 <body>
 
 
-<div class="panel panel-default">
-    <div class="panel-heading">秒杀商品详情</div>
-    <div class="panel-body">
-        <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
-        <span>没有收货地址的提示。。。</span>
-    </div>
-    <table class="table" id="goodslist">
-        <tr>
-            <td>商品名称</td>
-            <td colspan="3" th:text="${goods.goodsName}"></td>
-        </tr>
-        <tr>
-            <td>商品图片</td>
-            <td colspan="3"><img th:src="@{${goods.goodsImg}}" width="200" height="200"/></td>
-        </tr>
-        <tr>
-            <td>秒杀开始时间</td>
-            <td th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></td>
-            <td id="miaoshaTip">
+<div class="top">
+    <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
+    <span>没有收货地址的提示。。。</span>
+</div>
+<div class="goods">
+    <div class="containers">
+        <div class="goods_view">
+            <img th:src="@{${goods.goodsImg}}" width="560"/>
+        </div>
+        <div class="goods_info">
+            <h2 th:text="${goods.goodsName}"></h2>
+            <p class="title" th:text="${goods.goodsTitle}"></p>
+            <p>
+                <span class="price1" th:text="${goods.seckillPrice}+'元  '"></span>
+                <del><span class="price2" th:text="${goods.goodsPrice}+'元'"></span></del>
+            </p>
+            <div class="seckill_data">
+                <div>
+                    <span>秒杀开始时间</span>
+                    <p th:text="${#dates.format(goods.startDate, 'yyyy-MM-dd HH:mm:ss')}"></p>
+                </div>
+                <div>
+                    <span>秒杀结束时间</span>
+                    <p th:text="${#dates.format(goods.endDate, 'yyyy-MM-dd HH:mm:ss')}"></p>
+                </div>
+            </div>
+            <div class="seckillStatus">
                 <input type="hidden" id="remainSeconds" th:value="${remainSeconds}"/>
                 <span th:if="${miaoshaStatus eq 0}">秒杀倒计时：<span id="countDown"
                                                                 th:text="${remainSeconds}"></span>秒</span>
                 <span th:if="${miaoshaStatus eq 1}">秒杀进行中</span>
                 <span th:if="${miaoshaStatus eq 2}">秒杀已结束</span>
-            </td>
-            <td>
-                <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
-                    <button class="btn btn-primary btn-block" type="submit" id="buyButton">立即秒杀</button>
-                    <input type="hidden" name="goodsId" th:value="${goods.id}"/>
-                </form>
-            </td>
-        </tr>
-        <tr>
-            <td>商品原价</td>
-            <td colspan="3" th:text="${goods.goodsPrice}"></td>
-        </tr>
-        <tr>
-            <td>秒杀价</td>
-            <td colspan="3" th:text="${goods.SeckillPrice}"></td>
-        </tr>
-        <tr>
-            <td>库存数量</td>
-            <td colspan="3" th:text="${goods.stockCount}"></td>
-        </tr>
-    </table>
-</div>
-<div class="product-box">
-    <div class="panel-body">
-        <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
-        <span>没有收货地址的提示。。。</span>
-    </div>
-</div>
-<div class="goods">
-    <div class="container">
-        <div class="goods_view">
-            <img src="/img/iphone.jpg" width="560"/>
-        </div>
-        <div class="goods_info">
+            </div>
+            <div class="count">
+                <span>库存数量：</span>
+                <span th:text="${goods.stockCount}"></span>
+            </div>
 
+            <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
+                <button class="btn btn-primary btn-block" type="submit" id="buyButton">马上抢...</button>
+                <input type="hidden" name="goodsId" th:value="${goods.id}"/>
+            </form>
         </div>
     </div>
 </div>
