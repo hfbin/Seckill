@@ -9,7 +9,7 @@ import java.util.Date;
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrdeInfo {
+public class OrderInfo {
     private Long id;
 
     private Long userId;

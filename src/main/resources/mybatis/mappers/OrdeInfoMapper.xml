@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="cn.hfbin.seckill.dao.OrdeInfoMapper" >
-  <resultMap id="BaseResultMap" type="cn.hfbin.seckill.entity.OrdeInfo" >
+  <resultMap id="BaseResultMap" type="cn.hfbin.seckill.entity.OrderInfo" >
     <constructor >
       <idArg column="id" jdbcType="BIGINT" javaType="java.lang.Long" />
       <arg column="user_id" jdbcType="BIGINT" javaType="java.lang.Long" />
@@ -30,7 +30,7 @@
     delete from order_info
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="cn.hfbin.seckill.entity.OrdeInfo" >
+  <insert id="insert" parameterType="cn.hfbin.seckill.entity.OrderInfo" >
     insert into order_info (id, user_id, goods_id, 
       addr_id, goods_name, goods_count, 
       goods_price, order_channel, status, 
@@ -40,7 +40,7 @@
       #{goodsPrice,jdbcType=DECIMAL}, #{orderChannel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
       #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.hfbin.seckill.entity.OrdeInfo" >
+  <insert id="insertSelective" parameterType="cn.hfbin.seckill.entity.OrderInfo" >
     insert into order_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -113,7 +113,7 @@
       </if>
     </trim>
   </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="cn.hfbin.seckill.entity.OrdeInfo" >
+  <update id="updateByPrimaryKeySelective" parameterType="cn.hfbin.seckill.entity.OrderInfo" >
     update order_info
     <set >
       <if test="userId != null" >
@@ -149,7 +149,7 @@
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
-  <update id="updateByPrimaryKey" parameterType="cn.hfbin.seckill.entity.OrdeInfo" >
+  <update id="updateByPrimaryKey" parameterType="cn.hfbin.seckill.entity.OrderInfo" >
     update order_info
     set user_id = #{userId,jdbcType=BIGINT},
       goods_id = #{goodsId,jdbcType=BIGINT},

@@ -82,4 +82,12 @@
       goods_id = #{goodsId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="selectByUserIdAndGoodsId" resultMap="BaseResultMap" parameterType="map" >
+    select
+    <include refid="Base_Column_List" />
+    from seckill_order
+    where user_id = #{userId,jdbcType=BIGINT}
+    and goods_id = #{goodsId,jdbcType=BIGINT}
+  </select>
 </mapper>

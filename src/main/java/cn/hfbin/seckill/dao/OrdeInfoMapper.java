@@ -1,17 +1,17 @@
 package cn.hfbin.seckill.dao;
 
-import cn.hfbin.seckill.entity.OrdeInfo;
+import cn.hfbin.seckill.entity.OrderInfo;
 
 public interface OrdeInfoMapper {
     int deleteByPrimaryKey(Long id);
 
-    int insert(OrdeInfo record);
+    int insert(OrderInfo record);
 
-    int insertSelective(OrdeInfo record);
+    int insertSelective(OrderInfo record);
 
-    OrdeInfo selectByPrimaryKey(Long id);
+    OrderInfo selectByPrimaryKey(Long id);
 
-    int updateByPrimaryKeySelective(OrdeInfo record);
+    int updateByPrimaryKeySelective(OrderInfo record);
 
-    int updateByPrimaryKey(OrdeInfo record);
+    int updateByPrimaryKey(OrderInfo record);
 }
