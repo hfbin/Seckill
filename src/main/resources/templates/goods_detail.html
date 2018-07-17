@@ -51,7 +51,7 @@
                 <span th:text="${goods.stockCount}"></span>
             </div>
 
-            <form id="miaoshaForm" method="post" action="/miaosha/do_miaosha">
+            <form id="miaoshaForm" method="post" action="/seckill/seckill">
                 <button class="btn btn-primary btn-block" type="submit" id="buyButton">马上抢...</button>
                 <input type="hidden" name="goodsId" th:value="${goods.id}"/>
             </form>

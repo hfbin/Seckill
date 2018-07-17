@@ -17,4 +17,6 @@ public interface SeckillGoodsService {
     List<GoodsBo> getSeckillGoodsList();
 
     GoodsBo getseckillGoodsBoByGoodsId(long goodsId);
+
+    int reduceStock(long goodsId);
 }

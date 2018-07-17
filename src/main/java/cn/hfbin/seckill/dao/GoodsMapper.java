@@ -23,4 +23,6 @@ public interface GoodsMapper {
     List<GoodsBo> selectAllGoodes ();
 
     GoodsBo getseckillGoodsBoByGoodsId(long goodsId);
+
+    int updateStock(long goodsId);
 }

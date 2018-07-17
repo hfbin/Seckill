@@ -211,4 +211,10 @@
     left join seckill_goods sg on sg.goods_id = goods.id
     WHERE  goods.id = #{goodsId}
   </select>
+
+  <update id="updateStock" parameterType="long" >
+    UPDATE seckill_goods
+    SET stock_count = stock_count -1
+    WHERE goods_id = #{goodsId}
+  </update>
 </mapper>
