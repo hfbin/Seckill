@@ -62,4 +62,10 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         seckillOrderMapper.insertSelective(seckillOrder);
         return orderInfo;
     }
+
+    @Override
+    public OrderInfo getOrderInfo(long orderId) {
+        final SeckillOrder seckillOrder = seckillOrderMapper.selectByPrimaryKey(orderId);
+        return orderService.getOrderInfo(seckillOrder.getOrderId());
+    }
 }

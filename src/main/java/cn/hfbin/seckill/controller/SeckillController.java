@@ -7,9 +7,11 @@ import cn.hfbin.seckill.entity.User;
 import cn.hfbin.seckill.redis.RedisService;
 import cn.hfbin.seckill.redis.UserKey;
 import cn.hfbin.seckill.result.CodeMsg;
+import cn.hfbin.seckill.result.Result;
 import cn.hfbin.seckill.service.SeckillGoodsService;
 import cn.hfbin.seckill.service.SeckillOrderService;
 import cn.hfbin.seckill.util.CookieUtil;
+import cn.hfbin.seckill.vo.OrderDetailVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -38,8 +40,8 @@ public class SeckillController {
     @Autowired
     SeckillOrderService seckillOrderService;
 
-    @RequestMapping("/seckill")
-    public String list(Model model,
+    @RequestMapping("/seckill2")
+    public String list2(Model model,
                        @RequestParam("goodsId")long goodsId ,HttpServletRequest request) {
 
         String loginToken = CookieUtil.readLoginToken(request);
@@ -66,5 +68,32 @@ public class SeckillController {
         model.addAttribute("orderInfo", orderInfo);
         model.addAttribute("goods", goods);
         return "order_detail";
+    }
+    @RequestMapping("/seckill")
+    public Result<OrderInfo> list(Model model,
+                                      @RequestParam("goodsId")long goodsId , HttpServletRequest request) {
+
+        String loginToken = CookieUtil.readLoginToken(request);
+        User user = redisService.get(UserKey.getByName, loginToken, User.class);
+        if(user == null) {
+            return Result.error(CodeMsg.USER_NO_LOGIN);
+        }
+        //判断库存
+        GoodsBo goods = seckillGoodsService.getseckillGoodsBoByGoodsId(goodsId);
+        if(goods == null) {
+            return Result.error(CodeMsg.NO_GOODS);
+        }
+        int stock = goods.getStockCount();
+        if(stock <= 0) {
+            return Result.error(CodeMsg.MIAO_SHA_OVER);
+        }
+        //判断是否已经秒杀到了
+        SeckillOrder order = seckillOrderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
+        if(order != null) {
+            return Result.error(CodeMsg.REPEATE_MIAOSHA);
+        }
+        //减库存 下订单 写入秒杀订单
+        OrderInfo orderInfo = seckillOrderService.insert(user, goods);
+        return Result.success(orderInfo);
     }
 }

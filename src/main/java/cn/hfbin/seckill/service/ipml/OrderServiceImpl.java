@@ -17,8 +17,14 @@ import org.springframework.stereotype.Service;
 public class OrderServiceImpl implements OrderService {
     @Autowired
     OrdeInfoMapper ordeInfoMapper;
+
     @Override
     public long addOrder(OrderInfo orderInfo) {
         return ordeInfoMapper.insertSelective(orderInfo);
+    }
+
+    @Override
+    public OrderInfo getOrderInfo(long orderId) {
+        return ordeInfoMapper.selectByPrimaryKey(orderId);
     }
 }

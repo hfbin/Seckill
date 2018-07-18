@@ -6,8 +6,11 @@ import cn.hfbin.seckill.entity.User;
 import cn.hfbin.seckill.redis.GoodsKey;
 import cn.hfbin.seckill.redis.RedisService;
 import cn.hfbin.seckill.redis.UserKey;
+import cn.hfbin.seckill.result.CodeMsg;
+import cn.hfbin.seckill.result.Result;
 import cn.hfbin.seckill.service.SeckillGoodsService;
 import cn.hfbin.seckill.util.CookieUtil;
+import cn.hfbin.seckill.vo.GoodsDetailVo;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
@@ -69,11 +72,10 @@ public class GoodsController {
         }
         return html;
     }
-    @RequestMapping("/to_detail/{goodsId}")
+    @RequestMapping("/to_detail2/{goodsId}")
     @ResponseBody
-    public String detail(Model model,
+    public String detail2(Model model,
                          @PathVariable("goodsId")long goodsId ,HttpServletRequest request  ,HttpServletResponse response  ) {
-
         String loginToken = CookieUtil.readLoginToken(request);
         User user = redisService.get(UserKey.getByName, loginToken, User.class);
         model.addAttribute("user", user);
@@ -113,6 +115,42 @@ public class GoodsController {
                 redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html , Const.RedisCacheExtime.GOODS_INFO);
             }
             return html;
+        }
+    }
+    @RequestMapping("/to_detail/{goodsId}")
+    @ResponseBody
+    public Result<GoodsDetailVo> detail(Model model,
+                                        @PathVariable("goodsId")long goodsId , HttpServletRequest request  , HttpServletResponse response  ) {
+        String loginToken = CookieUtil.readLoginToken(request);
+        User user = redisService.get(UserKey.getByName, loginToken, User.class);
+
+        GoodsBo goods = seckillGoodsService.getseckillGoodsBoByGoodsId(goodsId);
+        if(goods == null){
+            return Result.error(CodeMsg.NO_GOODS);
+        }else {
+            model.addAttribute("goods", goods);
+            long startAt = goods.getStartDate().getTime();
+            long endAt = goods.getEndDate().getTime();
+            long now = System.currentTimeMillis();
+
+            int miaoshaStatus = 0;
+            int remainSeconds = 0;
+            if(now < startAt ) {//秒杀还没开始，倒计时
+                miaoshaStatus = 0;
+                remainSeconds = (int)((startAt - now )/1000);
+            }else  if(now > endAt){//秒杀已经结束
+                miaoshaStatus = 2;
+                remainSeconds = -1;
+            }else {//秒杀进行中
+                miaoshaStatus = 1;
+                remainSeconds = 0;
+            }
+            GoodsDetailVo vo = new GoodsDetailVo();
+            vo.setGoods(goods);
+            vo.setUser(user);
+            vo.setRemainSeconds(remainSeconds);
+            vo.setMiaoshaStatus(miaoshaStatus);
+            return Result.success(vo);
         }
     }
 }
