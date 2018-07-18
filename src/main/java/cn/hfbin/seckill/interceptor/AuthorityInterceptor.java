@@ -96,13 +96,14 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             //geelynote 这里要设置编码，否则会乱码
             response.setCharacterEncoding("UTF-8");
             // 这里要设置返回值类型，因为全部是json接口。
-            response.setContentType("application/json;charset=UTF-8");
-
+           /* response.setContentType("application/json;charset=UTF-8");
             PrintWriter out = response.getWriter();
-            out.print(JsonUtil.obj2String(Result.error(CodeMsg.USER_NO_LOGIN)));
+            out.print(JsonUtil.obj2String(Result.error(CodeMsg.USER_NO_LOGIN)));*/
+
+            response.sendRedirect("/page/login");
             // 这里要关闭流
-            out.flush();
-            out.close();
+            //out.flush();
+            //out.close();
             return false;
         }
         return true;

@@ -16,7 +16,7 @@
 <div class="seckill_content">
     <div class="title"><h2>秒杀商品列表</h2></div>
     <div class="all_seckill_goods">
-        <div class="seckill_goods" th:each="goods,goodsStat : ${goodsList}">
+                <div class="seckill_goods" th:each="goods,goodsStat : ${goodsList}">
             <h4 th:text="${goods.goodsName}"></h4>
             <img th:src="@{${goods.goodsImg}}" width="250"/>
             <br/><br/>

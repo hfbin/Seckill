@@ -14,7 +14,8 @@
 
 
 <div class="top">
-    <span th:if="${user eq null}"> 您还没有登录，请登陆后再操作<br/></span>
+    <span th:if="${user == null}"> 您还没有登录，请登陆后再操作</span>
+    <span th:if="${user != null}"> <span th:text="'欢迎您 '+${user.userName}"></span></span>
     <span>没有收货地址的提示。。。</span>
 </div>
 <div class="goods">
@@ -41,10 +42,10 @@
             </div>
             <div class="seckillStatus">
                 <input type="hidden" id="remainSeconds" th:value="${remainSeconds}"/>
-                <span th:if="${miaoshaStatus eq 0}">秒杀倒计时：<span id="countDown"
+                <span th:if="${seckillStatus eq 0}">秒杀倒计时：<span id="countDown"
                                                                 th:text="${remainSeconds}"></span>秒</span>
-                <span th:if="${miaoshaStatus eq 1}">秒杀进行中</span>
-                <span th:if="${miaoshaStatus eq 2}">秒杀已结束</span>
+                <span th:if="${seckillStatus eq 1}">秒杀进行中</span>
+                <span th:if="${seckillStatus eq 2}">秒杀已结束</span>
             </div>
             <div class="count">
                 <span>库存数量：</span>
