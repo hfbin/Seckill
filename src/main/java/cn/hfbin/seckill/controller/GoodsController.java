@@ -47,21 +47,45 @@ public class GoodsController {
     ApplicationContext applicationContext;
 
     @RequestMapping("/list")
+    @ResponseBody
     public String list(Model model, HttpServletRequest request, HttpServletResponse response) {
+        //修改前
+       /* List<GoodsBo> goodsList = seckillGoodsService.getSeckillGoodsList();
+         model.addAttribute("goodsList", goodsList);
+    	 return "goods_list";*/
+        //修改后
+        String html = redisService.get(GoodsKey.getGoodsList, "", String.class);
+        if(!StringUtils.isEmpty(html)) {
+            return html;
+        }
         List<GoodsBo> goodsList = seckillGoodsService.getSeckillGoodsList();
         model.addAttribute("goodsList", goodsList);
-        return "goods_list";
+        SpringWebContext ctx = new SpringWebContext(request,response,
+                request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+        //手动渲染
+        html = thymeleafViewResolver.getTemplateEngine().process("goods_list", ctx);
+        if(!StringUtils.isEmpty(html)) {
+            redisService.set(GoodsKey.getGoodsList, "", html , Const.RedisCacheExtime.GOODS_LIST);
+        }
+        return html;
     }
     @RequestMapping("/to_detail/{goodsId}")
+    @ResponseBody
     public String detail(Model model,
                          @PathVariable("goodsId")long goodsId ,HttpServletRequest request  ,HttpServletResponse response  ) {
 
         String loginToken = CookieUtil.readLoginToken(request);
         User user = redisService.get(UserKey.getByName, loginToken, User.class);
         model.addAttribute("user", user);
+
+        //取缓存
+        String html = redisService.get(GoodsKey.getGoodsDetail, ""+goodsId, String.class);
+        if(!StringUtils.isEmpty(html)) {
+            return html;
+        }
         GoodsBo goods = seckillGoodsService.getseckillGoodsBoByGoodsId(goodsId);
         if(goods == null){
-            return "error/404";
+            return "没有找到该页面";
         }else {
             model.addAttribute("goods", goods);
             long startAt = goods.getStartDate().getTime();
@@ -80,9 +104,15 @@ public class GoodsController {
                 miaoshaStatus = 1;
                 remainSeconds = 0;
             }
-            model.addAttribute("miaoshaStatus", miaoshaStatus);
+            model.addAttribute("seckillStatus", miaoshaStatus);
             model.addAttribute("remainSeconds", remainSeconds);
-            return "goods_detail";
+            SpringWebContext ctx = new SpringWebContext(request,response,
+                    request.getServletContext(),request.getLocale(), model.asMap(), applicationContext );
+            html = thymeleafViewResolver.getTemplateEngine().process("goods_detail", ctx);
+            if(!StringUtils.isEmpty(html)) {
+                redisService.set(GoodsKey.getGoodsDetail, ""+goodsId, html , Const.RedisCacheExtime.GOODS_INFO);
+            }
+            return html;
         }
     }
 }
