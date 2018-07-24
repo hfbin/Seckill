@@ -5,9 +5,12 @@ import cn.hfbin.seckill.dao.SeckillOrderMapper;
 import cn.hfbin.seckill.entity.OrderInfo;
 import cn.hfbin.seckill.entity.SeckillOrder;
 import cn.hfbin.seckill.entity.User;
+import cn.hfbin.seckill.result.CodeMsg;
+import cn.hfbin.seckill.result.Result;
 import cn.hfbin.seckill.service.OrderService;
 import cn.hfbin.seckill.service.SeckillGoodsService;
 import cn.hfbin.seckill.service.SeckillOrderService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,6 +23,7 @@ import java.util.Date;
  * Time: 16:47
  * Such description:
  */
+@Slf4j
 @Service("seckillOrderService")
 public class SeckillOrderServiceImpl implements SeckillOrderService {
 
@@ -54,9 +58,10 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
         orderInfo.setUserId((long)user.getId());
         //添加信息进订单
         long orderId = orderService.addOrder(orderInfo);
+        log.info("orderId -->" +orderId+"");
         SeckillOrder seckillOrder = new SeckillOrder();
         seckillOrder.setGoodsId(goods.getId());
-        seckillOrder.setOrderId(orderId);
+        seckillOrder.setOrderId(orderInfo.getId());
         seckillOrder.setUserId((long)user.getId());
         //插入秒杀表
         seckillOrderMapper.insertSelective(seckillOrder);
@@ -65,7 +70,11 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
 
     @Override
     public OrderInfo getOrderInfo(long orderId) {
-        final SeckillOrder seckillOrder = seckillOrderMapper.selectByPrimaryKey(orderId);
+        SeckillOrder seckillOrder = seckillOrderMapper.selectByPrimaryKey(orderId);
+        if(seckillOrder == null){
+            return null;
+        }
         return orderService.getOrderInfo(seckillOrder.getOrderId());
     }
+
 }

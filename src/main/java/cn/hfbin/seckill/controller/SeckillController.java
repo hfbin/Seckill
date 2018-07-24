@@ -16,7 +16,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 
@@ -69,7 +71,8 @@ public class SeckillController {
         model.addAttribute("goods", goods);
         return "order_detail";
     }
-    @RequestMapping("/seckill")
+    @RequestMapping(value = "/seckill" ,method = RequestMethod.POST)
+    @ResponseBody
     public Result<OrderInfo> list(Model model,
                                       @RequestParam("goodsId")long goodsId , HttpServletRequest request) {
 

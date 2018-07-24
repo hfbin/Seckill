@@ -40,7 +40,7 @@
       #{goodsPrice,jdbcType=DECIMAL}, #{orderChannel,jdbcType=INTEGER}, #{status,jdbcType=INTEGER}, 
       #{createDate,jdbcType=TIMESTAMP}, #{payDate,jdbcType=TIMESTAMP})
   </insert>
-  <insert id="insertSelective" parameterType="cn.hfbin.seckill.entity.OrderInfo" >
+  <insert id="insertSelective" parameterType="cn.hfbin.seckill.entity.OrderInfo" useGeneratedKeys="true" keyProperty="id">
     insert into order_info
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
