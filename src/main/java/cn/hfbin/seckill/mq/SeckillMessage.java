@@ -3,7 +3,7 @@ package cn.hfbin.seckill.mq;
 
 import cn.hfbin.seckill.entity.User;
 
-public class MiaoshaMessage {
+public class SeckillMessage {
 	private User user;
 	private long goodsId;
 	public User getUser() {

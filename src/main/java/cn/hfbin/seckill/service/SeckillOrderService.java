@@ -22,4 +22,6 @@ public interface SeckillOrderService {
 
     OrderInfo getOrderInfo(long orderId);
 
+    long getSeckillResult(Long userId, long goodsId);
+
 }
