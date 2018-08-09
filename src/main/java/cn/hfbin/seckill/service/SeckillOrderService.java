@@ -24,4 +24,8 @@ public interface SeckillOrderService {
 
     long getSeckillResult(Long userId, long goodsId);
 
+    boolean checkPath(User user, long goodsId, String path);
+
+    String createMiaoshaPath(User user, long goodsId);
+
 }

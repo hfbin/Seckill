@@ -13,12 +13,14 @@ import cn.hfbin.seckill.result.Result;
 import cn.hfbin.seckill.service.OrderService;
 import cn.hfbin.seckill.service.SeckillGoodsService;
 import cn.hfbin.seckill.service.SeckillOrderService;
+import cn.hfbin.seckill.util.MD5Util;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
+import java.util.UUID;
 
 /**
  * Created by: HuangFuBin
@@ -101,11 +103,32 @@ public class SeckillOrderServiceImpl implements SeckillOrderService {
             }
         }
     }
+    public boolean checkPath(User user, long goodsId, String path) {
+        if(user == null || path == null) {
+            return false;
+        }
+        String pathOld = redisService.get(SeckillKey.getSeckillPath, ""+user.getId() + "_"+ goodsId, String.class);
+        return path.equals(pathOld);
+    }
 
+    public String createMiaoshaPath(User user, long goodsId) {
+        if(user == null || goodsId <=0) {
+            return null;
+        }
+        String str = MD5Util.md5(UUID.randomUUID()+"123456");
+        redisService.set(SeckillKey.getSeckillPath, ""+user.getId() + "_"+ goodsId, str , Const.RedisCacheExtime.GOODS_ID);
+        return str;
+    }
+
+    /*
+    * 秒杀商品结束标记
+    * */
     private void setGoodsOver(Long goodsId) {
         redisService.set(SeckillKey.isGoodsOver, ""+goodsId, true , Const.RedisCacheExtime.GOODS_ID);
     }
-
+    /*
+    * 查看秒杀商品是否已经结束
+    * */
     private boolean getGoodsOver(long goodsId) {
         return redisService.exists(SeckillKey.isGoodsOver, ""+goodsId);
     }

@@ -21,11 +21,11 @@
 <div class="goods">
     <div class="containers">
         <div class="goods_view">
-            <img id="goodsImg"  width="560"/>
+            <img id="goodsImg" width="560"/>
         </div>
         <div class="goods_info">
             <h2 id="goodsName"></h2>
-            <p class="title" id ="goodsTitle"></p>
+            <p class="title" id="goodsTitle"></p>
             <p>
                 <span class="price1" id="seckillPrice"></span>
                 <del><span class="price2" id="goodsPrice"></span></del>
@@ -41,7 +41,7 @@
                 </div>
             </div>
             <div class="seckillStatus">
-                <input type="hidden" id="remainSeconds" />
+                <input type="hidden" id="remainSeconds"/>
                 <span id="miaoshaTip"></span>
             </div>
             <div class="count">
@@ -49,8 +49,8 @@
                 <span id="stockCount"></span>
             </div>
 
-            <button class="btn btn-primary btn-block" type="button" id="buyButton"onclick="doMiaosha()">立即秒杀</button>
-            <input type="hidden" name="goodsId"  id="goodsId" />
+            <button class="btn btn-primary btn-block" type="button" id="buyButton" onclick="getSeckillPath()">立即秒杀</button>
+            <input type="hidden" name="goodsId" id="goodsId"/>
         </div>
     </div>
 </div>
@@ -67,19 +67,20 @@
 <!-- common.js -->
 <script type="text/javascript" src="/js/common.js"></script>
 <script>
-
-    function doMiaosha(){
+    function getSeckillPath(){
+        var goodsId = $("#goodsId").val();
+        g_showLoading();
         $.ajax({
-            url:"/seckill/seckill",
-            type:"POST",
+            url:"/seckill/path",
+            type:"GET",
             data:{
-                goodsId:$("#goodsId").val()
+                goodsId:goodsId,
+                verifyCode:$("#verifyCode").val()
             },
             success:function(data){
                 if(data.code == 0){
-                    console.log(data);
-                    layer.msg("下单成功");
-                    window.location.href="/order_detail.htm?orderId="+data.data.id;
+                    var path = data.data;
+                    doMiaosha(path);
                 }else{
                     layer.msg(data.msg);
                 }
@@ -88,15 +89,81 @@
                 layer.msg("客户端请求有误");
             }
         });
+    }
+    function getMiaoshaResult(goodsId) {
+        g_showLoading();
+        $.ajax({
+            url: "/seckill/result",
+            type: "GET",
+            data: {
+                goodsId: $("#goodsId").val()
+            },
+            success: function (data) {
+                if (data.code == 0) {
+                    var result = data.data;
+                    if (result < 0) {
+                        layer.msg("对不起，秒杀失败");
+                    } else if (result == 0) {//继续轮询
+                        setTimeout(function () {
+                            getMiaoshaResult(goodsId);
+                        }, 200);
+                    } else {
+                        layer.confirm("恭喜你，秒杀成功！查看订单？", {btn: ["确定", "取消"]},
+                            function () {
+                                window.location.href = "/order_detail.htm?orderId=" + result;
+                            },
+                            function () {
+                                layer.closeAll();
+                            });
+                    }
+                } else {
+                    layer.msg(data.msg);
+                }
+            },
+            error: function () {
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+
+    function doMiaosha(path) {
+        $.ajax({
+                url: "/seckill/"+path+"/seckill",
+                type: "POST",
+                data: {
+                    goodsId: $("#goodsId").val(),
+                },
+                success: function (data) {
+                    if (data.code == 0) {
+                        //window.location.href="/order_detail.htm?orderId="+data.data.id;
+                        getMiaoshaResult($("#goodsId").val());
+                    } else if (data.code == 500216) {
+                        layer.confirm(data.msg, {btn: ["确定", "取消"]},
+                            function () {
+                                window.location.href = "/page/login";
+                            },
+                            function () {
+                                layer.closeAll();
+                            });
+                    } else {
+                        layer.msg(data.msg);
+                    }
+                },
+                error: function () {
+                    layer.msg("客户端请求有误");
+                }
+            }
+        )
+        ;
 
     }
 
-    function render(detail){
+    function render(detail) {
         var miaoshaStatus = detail.miaoshaStatus;
-        var  remainSeconds = detail.remainSeconds;
+        var remainSeconds = detail.remainSeconds;
         var goods = detail.goods;
         var user = detail.user;
-        if(user){
+        if (user) {
             $("#userTip").hide();
         }
         $("#goodsName").text(goods.goodsName);
@@ -107,52 +174,52 @@
         $("#remainSeconds").val(remainSeconds);
         $("#goodsId").val(goods.id);
         $("#goodsPrice").text(goods.goodsPrice);
-        $("#miaoshaPrice").text(goods.miaoshaPrice);
+        $("#seckillPrice").text(goods.seckillPrice);
         $("#stockCount").text(goods.stockCount);
         countDown();
     }
 
-    $(function(){
+    $(function () {
         //countDown();
         getDetail();
     });
 
-    function getDetail(){
+    function getDetail() {
         var goodsId = g_getQueryString("goodsId");
         $.ajax({
-            url:"/goods/detail/"+goodsId,
-            type:"GET",
-            success:function(data){
-                if(data.code == 0){
+            url: "/goods/detail/" + goodsId,
+            type: "GET",
+            success: function (data) {
+                if (data.code == 0) {
                     render(data.data);
-                }else{
+                } else {
                     layer.msg(data.msg);
                 }
             },
-            error:function(){
+            error: function () {
                 layer.msg("客户端请求有误");
             }
         });
     }
 
-    function countDown(){
+    function countDown() {
         var remainSeconds = $("#remainSeconds").val();
         var timeout;
-        if(remainSeconds > 0){//秒杀还没开始，倒计时
+        if (remainSeconds > 0) {//秒杀还没开始，倒计时
             $("#buyButton").attr("disabled", true);
-            $("#miaoshaTip").html("秒杀倒计时："+remainSeconds+"秒");
-            timeout = setTimeout(function(){
+            $("#miaoshaTip").html("秒杀倒计时：" + remainSeconds + "秒");
+            timeout = setTimeout(function () {
                 $("#countDown").text(remainSeconds - 1);
                 $("#remainSeconds").val(remainSeconds - 1);
                 countDown();
-            },1000);
-        }else if(remainSeconds == 0){//秒杀进行中
+            }, 1000);
+        } else if (remainSeconds == 0) {//秒杀进行中
             $("#buyButton").attr("disabled", false);
-            if(timeout){
+            if (timeout) {
                 clearTimeout(timeout);
             }
             $("#miaoshaTip").html("秒杀进行中");
-        }else{//秒杀已经结束
+        } else {//秒杀已经结束
             $("#buyButton").attr("disabled", true);
             $("#miaoshaTip").html("秒杀已经结束");
         }
