@@ -1,6 +1,9 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
 
+mvnw.cmd
+mvnw
+
 ### STS ###
 .apt_generated
 .classpath
@@ -15,7 +18,7 @@
 *.iws
 *.iml
 *.ipr
-
+.mvn
 ### NetBeans ###
 /nbproject/private/
 /build/
