@@ -1,7 +1,6 @@
 /target/
 !.mvn/wrapper/maven-wrapper.jar
-
-mvnw.cmd
+*.cmd
 mvnw
 
 ### STS ###
@@ -19,6 +18,7 @@ mvnw
 *.iml
 *.ipr
 .mvn
+
 ### NetBeans ###
 /nbproject/private/
 /build/
