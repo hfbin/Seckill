@@ -59,6 +59,7 @@ public class UserUtil {
 //		pstmt.close();
 //		conn.close();
 //		System.out.println("insert to db");
+
 		//登录，生成token
 		String urlString = "http://localhost:8080/user/login";
 		File file = new File("D:/tokens.txt");
