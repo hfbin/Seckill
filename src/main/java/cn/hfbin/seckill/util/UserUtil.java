@@ -60,7 +60,7 @@ public class UserUtil {
 //		conn.close();
 //		System.out.println("insert to db");
 		//登录，生成token
-		String urlString = "http://localhost:8080/user/login";
+		String urlString = "http://localhost:8080/page/login";
 		File file = new File("D:/tokens.txt");
 		if(file.exists()) {
 			file.delete();

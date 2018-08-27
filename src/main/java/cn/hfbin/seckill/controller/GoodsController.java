@@ -120,7 +120,7 @@ public class GoodsController {
     @RequestMapping("/detail/{goodsId}")
     @ResponseBody
     public Result<GoodsDetailVo> detail(Model model,
-                                        @PathVariable("goodsId")long goodsId , HttpServletRequest request  , HttpServletResponse response  ) {
+                                        @PathVariable("goodsId")long goodsId , HttpServletRequest request  ) {
         String loginToken = CookieUtil.readLoginToken(request);
         User user = redisService.get(UserKey.getByName, loginToken, User.class);
 
