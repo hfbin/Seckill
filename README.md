@@ -40,8 +40,5 @@ idea  2017.2.3
 订单详情页
 ![123](img/4.png)
 
- 
- 
- 源码：https://github.com/hfbin/Seckill
  博客地址：https://blog.csdn.net/qq_33524158
 
