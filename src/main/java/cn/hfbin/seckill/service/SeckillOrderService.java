@@ -20,4 +20,12 @@ public interface SeckillOrderService {
 
     OrderInfo insert(User user , GoodsBo goodsBo);
 
+    OrderInfo getOrderInfo(long orderId);
+
+    long getSeckillResult(Long userId, long goodsId);
+
+    boolean checkPath(User user, long goodsId, String path);
+
+    String createMiaoshaPath(User user, long goodsId);
+
 }

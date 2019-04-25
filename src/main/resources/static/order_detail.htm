@@ -1,0 +1,112 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>订单详情</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <!-- jquery -->
+    <script type="text/javascript" src="/js/jquery.min.js"></script>
+    <!-- bootstrap -->
+    <link rel="stylesheet" type="text/css" href="/bootstrap/css/bootstrap.min.css" />
+    <link rel="stylesheet" type="text/css" href="/css/detail.css"/>
+    <script type="text/javascript" src="/bootstrap/js/bootstrap.min.js"></script>
+    <!-- jquery-validator -->
+    <script type="text/javascript" src="/jquery-validation/jquery.validate.min.js"></script>
+    <script type="text/javascript" src="/jquery-validation/localization/messages_zh.min.js"></script>
+    <!-- layer -->
+    <script type="text/javascript" src="/layer/layer.js"></script>
+    <!-- md5.js -->
+    <script type="text/javascript" src="/js/md5.min.js"></script>
+    <!-- common.js -->
+    <script type="text/javascript" src="/js/common.js"></script>
+</head>
+<body>
+
+<div class="top">
+    <h4 style="text-align: center">订单详情页</h4>
+</div>
+<div class="goods">
+    <div class="containers">
+        <div class="goods_view">
+            <img  id="goodsImg"  width="560"/>
+        </div>
+        <div class="goods_info">
+            <h2 id="goodsName"></h2>
+            <p class="title" text="${goods.goodsTitle}"></p>
+            <p>
+                <span class="price1"  id="orderPrice"></span>
+            </p>
+            <div class="seckill_data">
+                <div>
+                    <span>下单时间</span>
+                    <p id="createDate"></p>
+                </div>
+                <div>
+                    <span>订单状态</span>
+                    <p id="orderStatus"></p>
+                </div>
+            </div>
+            <div class="count">
+                <span>收货人：</span>
+                <span>XXX  1383838483</span>
+            </div>
+            <div class="count">
+                <span>收货地址：</span>
+                <span>北京市昌平区回龙观龙博一区</span>
+            </div>
+
+                <button class="btn btn-primary btn-block" type="submit" id="payButton">立即支付</button>
+        </div>
+    </div>
+</div>
+</body>
+</html>
+<script>
+    function render(detail){
+        var goods = detail.goods;
+        var order = detail.order;
+        $("#goodsName").text(goods.goodsName);
+        $("#goodsImg").attr("src", goods.goodsImg);
+        $("#orderPrice").text(order.goodsPrice);
+        $("#createDate").text(new Date(order.createDate).format("yyyy-MM-dd hh:mm:ss"));
+        var status = "";
+        if(order.status == 0){
+            status = "未支付"
+        }else if(order.status == 1){
+            status = "待发货";
+        }
+        $("#orderStatus").text(status);
+
+    }
+
+    $(function(){
+        getOrderDetail();
+    })
+
+    function getOrderDetail(){
+        var orderId = g_getQueryString("orderId");
+        $.ajax({
+            url:"/order/detail",
+            type:"GET",
+            data:{
+                orderId:orderId
+            },
+            success:function(data){
+                if(data.code == 0){
+                    render(data.data);
+                }else if(data.code == 500216){
+                    layer.msg(data.msg);
+                    window.location.href = "/page/login";
+                }else{
+                    layer.msg(data.msg);
+                }
+
+            },
+            error:function(){
+                layer.msg("客户端请求有误");
+            }
+        });
+    }
+
+
+
+</script>
