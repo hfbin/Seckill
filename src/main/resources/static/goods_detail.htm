@@ -77,9 +77,17 @@
                 goodsId:goodsId
             },
             success:function(data){
-                if(data.code == 0){
+                if(data.code === 0){
                     var path = data.data;
                     doMiaosha(path);
+                } else if(data.code === 500216){
+                    layer.confirm("未登录是否去登录！！！", {btn: ["确定", "取消"]},
+                        function () {
+                            window.location.href = "/page/login";
+                        },
+                        function () {
+                            layer.closeAll();
+                        });
                 }else{
                     layer.msg(data.msg);
                 }

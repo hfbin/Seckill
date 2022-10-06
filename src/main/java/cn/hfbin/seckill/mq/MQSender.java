@@ -11,15 +11,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class MQSender {
 
-	private static Logger log = LoggerFactory.getLogger(MQSender.class);
-	
-	@Autowired
-	AmqpTemplate amqpTemplate ;
-	
-	public void sendSeckillMessage(SeckillMessage mm) {
-		String msg = RedisService.beanToString(mm);
-		log.info("send message:"+msg);
-		amqpTemplate.convertAndSend(MQConfig.MIAOSHA_QUEUE, msg);
-	}
+    private static Logger log = LoggerFactory.getLogger(MQSender.class);
+
+    @Autowired
+    AmqpTemplate amqpTemplate;
+
+    public void sendSeckillMessage(SeckillMessage mm) {
+        String msg = RedisService.beanToString(mm);
+        log.info("send message:" + msg);
+        amqpTemplate.convertAndSend(MQConfig.MIAOSHA_QUEUE, msg);
+    }
 
 }

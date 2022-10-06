@@ -21,7 +21,7 @@ public class SessionExpireFilter implements Filter {
     @Autowired
     RedisService redisService;
     @Override
-    public void init(FilterConfig filterConfig) throws ServletException {
+    public void init(FilterConfig filterConfig) {
 
     }
 
@@ -37,7 +37,7 @@ public class SessionExpireFilter implements Filter {
             User user = redisService.get(UserKey.getByName,loginToken, User.class);
             if(user != null){
                 //如果user不为空，则重置session的时间，即调用expire命令
-                redisService.expice(UserKey.getByName , loginToken, Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
+                redisService.expire(UserKey.getByName , loginToken, Const.RedisCacheExtime.REDIS_SESSION_EXTIME);
             }
         }
         filterChain.doFilter(servletRequest,servletResponse);

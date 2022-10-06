@@ -37,77 +37,78 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     @Autowired
     RedisService redisService;
 
-    private Logger logger = LoggerFactory.getLogger(AuthorityInterceptor.class);
+    private final Logger logger = LoggerFactory.getLogger(AuthorityInterceptor.class);
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        //请求controller中的方法名
-        HandlerMethod handlerMethod = (HandlerMethod) handler;
-        //解析HandlerMethod
-        String methodName = handlerMethod.getMethod().getName();
-        String className = handlerMethod.getBean().getClass().getSimpleName();
+        if (handler instanceof HandlerMethod) {
+            //请求controller中的方法名
+            HandlerMethod handlerMethod = (HandlerMethod) handler;
+            //解析HandlerMethod
+            String methodName = handlerMethod.getMethod().getName();
+            String className = handlerMethod.getBean().getClass().getSimpleName();
 
-        StringBuffer requestParamBuffer = new StringBuffer();
-        Map paramMap = request.getParameterMap();
-        Iterator it = paramMap.entrySet().iterator();
-        while (it.hasNext()) {
-            Map.Entry entry = (Map.Entry) it.next();
-            String mapKey = (String) entry.getKey();
-            String mapValue = "";
+            StringBuffer requestParamBuffer = new StringBuffer();
+            Map paramMap = request.getParameterMap();
+            Iterator it = paramMap.entrySet().iterator();
+            while (it.hasNext()) {
+                Map.Entry entry = (Map.Entry) it.next();
+                String mapKey = (String) entry.getKey();
+                String mapValue = "";
 
-            //request的这个参数map的value返回的是一个String[]
-            Object obj = entry.getValue();
-            if (obj instanceof String[]) {
-                String[] strs = (String[]) obj;
-                mapValue = Arrays.toString(strs);
+                //request的这个参数map的value返回的是一个String[]
+                Object obj = entry.getValue();
+                if (obj instanceof String[]) {
+                    String[] strs = (String[]) obj;
+                    mapValue = Arrays.toString(strs);
+                }
+                requestParamBuffer.append(mapKey).append("=").append(mapValue);
             }
-            requestParamBuffer.append(mapKey).append("=").append(mapValue);
-        }
 
-        //接口限流
-        AccessLimit accessLimit = handlerMethod.getMethodAnnotation(AccessLimit.class);
-        if(accessLimit == null) {
-            return true;
-        }
-        int seconds = accessLimit.seconds();
-        int maxCount = accessLimit.maxCount();
-        boolean needLogin = accessLimit.needLogin();
-        String key = request.getRequestURI();
+            //接口限流
+            AccessLimit accessLimit = handlerMethod.getMethodAnnotation(AccessLimit.class);
+            if (accessLimit == null) {
+                return true;
+            }
+            int seconds = accessLimit.seconds();
+            int maxCount = accessLimit.maxCount();
+            boolean needLogin = accessLimit.needLogin();
+            String key = request.getRequestURI();
 
 
-        //对于拦截器中拦截manage下的login.do的处理,对于登录不拦截，直接放行
-        if (!StringUtils.equals(className, "SeckillController")) {
-            //如果是拦截到登录请求，不打印参数，因为参数里面有密码，全部会打印到日志中，防止日志泄露
-            logger.info("权限拦截器拦截到请求 SeckillController ,className:{},methodName:{}", className, methodName);
-            return true;
-        }
+            //对于拦截器中拦截manage下的login.do的处理,对于登录不拦截，直接放行
+            if (!StringUtils.equals(className, "SeckillController")) {
+                //如果是拦截到登录请求，不打印参数，因为参数里面有密码，全部会打印到日志中，防止日志泄露
+                logger.info("权限拦截器拦截到请求 SeckillController ,className:{},methodName:{}", className, methodName);
+                return true;
+            }
 
-        logger.info("--> 权限拦截器拦截到请求,className:{},methodName:{},param:{}", className, methodName, requestParamBuffer);
-        User user = null;
-        String loginToken = CookieUtil.readLoginToken(request);
-        if (StringUtils.isNotEmpty(loginToken)) {
-            user = redisService.get(UserKey.getByName, loginToken, User.class);
-        }
+            logger.info("--> 权限拦截器拦截到请求,className:{},methodName:{},param:{}", className, methodName, requestParamBuffer);
+            User user = null;
+            String loginToken = CookieUtil.readLoginToken(request);
+            if (StringUtils.isNotEmpty(loginToken)) {
+                user = redisService.get(UserKey.getByName, loginToken, User.class);
+            }
 
-        if(needLogin) {
-            if(user == null) {
-                render(response, CodeMsg.USER_NO_LOGIN);
+            if (needLogin) {
+                if (user == null) {
+                    render(response, CodeMsg.USER_NO_LOGIN);
+                    return false;
+                }
+                key += "_" + user.getId();
+            } else {
+                //do nothing
+            }
+            AccessKey ak = AccessKey.withExpire;
+            Integer count = redisService.get(ak, key, Integer.class);
+            if (count == null) {
+                redisService.set(ak, key, 1, seconds);
+            } else if (count < maxCount) {
+                redisService.incr(ak, key);
+            } else {
+                render(response, CodeMsg.ACCESS_LIMIT_REACHED);
                 return false;
             }
-            key += "_" + user.getId();
-        }else {
-            //do nothing
-        }
-        AccessKey ak = AccessKey.withExpire;
-        Integer count = redisService.get(ak, key, Integer.class);
-        if(count  == null) {
-            redisService.set(ak, key, 1, seconds);
-        }else if(count < maxCount) {
-            redisService.incr(ak, key);
-        }else {
-            render(response, CodeMsg.ACCESS_LIMIT_REACHED);
-            return false;
-        }
 
         /*if (user == null) {
             //重置 重写response一定要重置 这里要添加reset，否则报异常 getWriter() has already been called for this response
@@ -124,6 +125,8 @@ public class AuthorityInterceptor implements HandlerInterceptor {
             out.close();
             return false;
         }*/
+        }
+
         return true;
     }
 
@@ -135,10 +138,11 @@ public class AuthorityInterceptor implements HandlerInterceptor {
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
     }
-    private void render(HttpServletResponse response, CodeMsg cm)throws Exception {
+
+    private void render(HttpServletResponse response, CodeMsg cm) throws Exception {
         response.setContentType("application/json;charset=UTF-8");
         OutputStream out = response.getOutputStream();
-        String str  = JSON.toJSONString(Result.error(cm));
+        String str = JSON.toJSONString(Result.error(cm));
         out.write(str.getBytes("UTF-8"));
         out.flush();
         out.close();

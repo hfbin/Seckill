@@ -51,10 +51,13 @@ public class SeckillController implements InitializingBean {
     @Autowired
     MQSender mqSender;
 
-    private HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
+    /**
+     * 如果是集群情况下，需要达到一定量此缓存才能起到重大作用
+     */
+    private final HashMap<Long, Boolean> localOverMap = new HashMap<Long, Boolean>();
 
     /**
-     * 系统初始化
+     * 将库存初始化到本地缓存及redis缓存，原则上次块应该在创建秒杀活动时候触发的（为了演示，此项目没有创建活动逻辑，所有放在启动项目时候放进内存）
      */
     public void afterPropertiesSet() throws Exception {
         List<GoodsBo> goodsList = seckillGoodsService.getSeckillGoodsList();
@@ -62,7 +65,7 @@ public class SeckillController implements InitializingBean {
             return;
         }
         for (GoodsBo goods : goodsList) {
-            redisService.set(GoodsKey.getSeckillGoodsStock, "" + goods.getId(), goods.getStockCount(), Const.RedisCacheExtime.GOODS_LIST);
+            redisService.set(GoodsKey.getSeckillGoodsStock, String.valueOf(goods.getId()), goods.getStockCount(), Const.RedisCacheExtime.GOODS_LIST);
             localOverMap.put(goods.getId(), false);
         }
     }
@@ -118,9 +121,9 @@ public class SeckillController implements InitializingBean {
         boolean over = localOverMap.get(goodsId);
         if (over) {
             return Result.error(CodeMsg.MIAO_SHA_OVER);
-        }/**/
+        }
         //预减库存
-        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, "" + goodsId);//10
+        long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, String.valueOf(goodsId));
         if (stock < 0) {
             localOverMap.put(goodsId, true);
             return Result.error(CodeMsg.MIAO_SHA_OVER);
@@ -135,24 +138,7 @@ public class SeckillController implements InitializingBean {
         mm.setUser(user);
         mm.setGoodsId(goodsId);
         mqSender.sendSeckillMessage(mm);
-        return Result.success(0);//排队中
-        /*//判断库存
-        GoodsBo goods = seckillGoodsService.getseckillGoodsBoByGoodsId(goodsId);
-        if(goods == null) {
-            return Result.error(CodeMsg.NO_GOODS);
-        }
-        int stock = goods.getStockCount();
-        if(stock <= 0) {
-            return Result.error(CodeMsg.MIAO_SHA_OVER);
-        }
-        //判断是否已经秒杀到了
-        SeckillOrder order = seckillOrderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
-        if(order != null) {
-            return Result.error(CodeMsg.REPEATE_MIAOSHA);
-        }
-        //减库存 下订单 写入秒杀订单
-        OrderInfo orderInfo = seckillOrderService.insert(user, goods);
-        return Result.success(orderInfo);*/
+        return Result.success(0);
     }
 
     /**

@@ -46,6 +46,7 @@ public class SeckillOrderController {
         if(user == null) {
             return Result.error(CodeMsg.USER_NO_LOGIN);
         }
+        // TODO: 可自行扩展缓存中获取，请勿吐槽，此教程只是为了让大家知道整个流程，细节东西自行拓展
         OrderInfo order = seckillOrderService.getOrderInfo(orderId);
         if(order == null) {
             return Result.error(CodeMsg.ORDER_NOT_EXIST);
