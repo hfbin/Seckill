@@ -122,16 +122,16 @@ public class SeckillController implements InitializingBean {
         if (over) {
             return Result.error(CodeMsg.MIAO_SHA_OVER);
         }
+        //判断是否已经秒杀到了
+        SeckillOrder order = seckillOrderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
+        if (order != null) {
+            return Result.error(CodeMsg.REPEATE_MIAOSHA);
+        }
         //预减库存
         long stock = redisService.decr(GoodsKey.getSeckillGoodsStock, String.valueOf(goodsId));
         if (stock < 0) {
             localOverMap.put(goodsId, true);
             return Result.error(CodeMsg.MIAO_SHA_OVER);
-        }
-        //判断是否已经秒杀到了
-        SeckillOrder order = seckillOrderService.getSeckillOrderByUserIdGoodsId(user.getId(), goodsId);
-        if (order != null) {
-            return Result.error(CodeMsg.REPEATE_MIAOSHA);
         }
         //入队
         SeckillMessage mm = new SeckillMessage();
